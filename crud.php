@@ -76,4 +76,13 @@ function eliminarUsuario($id) {
     return $arrJson;
 }
 
+function esCorreo($correo) {
+    // Usa la función filter_var con el filtro FILTER_VALIDATE_EMAIL para validar el formato del correo electrónico
+    if (filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 ?>

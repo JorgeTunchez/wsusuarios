@@ -66,6 +66,11 @@ switch ($metodo) {
             $boolError = true;
         }
 
+        $boolCorreo = esCorreo($data['email']);
+        if ( !$boolCorreo ){
+            $boolError = true;
+        }
+
         if ( !$boolError ){
             $nombre = $data['nombre'];
             $email = $data['email'];
@@ -118,6 +123,11 @@ switch ($metodo) {
         }
 
         if (isset($data['password']) == false || $data['password'] =='' ){
+            $boolError = true;
+        }
+
+        $boolCorreo = esCorreo($data['email']);
+        if ( !$boolCorreo ){
             $boolError = true;
         }
 
