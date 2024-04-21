@@ -5,8 +5,9 @@ require_once 'auth.php';
 require_once 'crud.php';
 
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: access");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Headers: *");
+header("Access-Control-Allow-Methods: *");
+header("Access-Control-Allow-Credentials: true");
 header("Content-Type: application/json; charset=UTF-8");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 date_default_timezone_set("America/Guatemala");
@@ -16,6 +17,11 @@ $metodo = $_SERVER['REQUEST_METHOD'];
 
 
 switch ($metodo) {
+	
+	case 'OPTIONS':
+		die();
+		break;
+			
     case 'GET':
         $id = isset($_GET['id']) ? $_GET['id'] : null;
         if( $id ){
@@ -24,7 +30,7 @@ switch ($metodo) {
                 http_response_code(200);
                 $arrJsonSalida["codigoRespuesta"] = 1;
                 $arrJsonSalida["descripcionRespuesta"] = "Datos consultados exitosamente.";
-                $arrJsonSalida["datos"] = $arrDatos;
+                $arrJsonSalida["datos"] = array($arrDatos);
                 echo json_encode($arrJsonSalida);
             }else{
                 http_response_code(500);
@@ -188,7 +194,7 @@ switch ($metodo) {
         }
         
         break;
-
+		
     default:
         http_response_code(405);
         $arrJsonSalida["codigoRespuesta"] = 0;

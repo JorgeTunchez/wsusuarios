@@ -5,13 +5,15 @@ require_once 'config.php';
 function obtenerTodosLosUsuarios() {
     // Permite consultar todos los usuarios registrados
     $arrDatos = array();
-    $sql = "SELECT id, nombre, email, password FROM usuarios ORDER BY id";
+    $sql = "SELECT id, nombre, email, password FROM usuarios ORDER BY nombre";
     $result = executeQuery($sql);
     if (!empty($result)) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $arrDatos[$row["id"]]["NOMBRE"] = $row["nombre"];
-            $arrDatos[$row["id"]]["EMAIL"] = $row["email"];
-            $arrDatos[$row["id"]]["PASSWORD"] = $row["password"];
+            $arrDat["id"] = $row["id"];
+			$arrDat["nombre"] = $row["nombre"];
+            $arrDat["email"] = $row["email"];
+            $arrDat["password"] = $row["password"];
+			array_push($arrDatos, $arrDat);
         }
     }
     return $arrDatos;
@@ -24,9 +26,9 @@ function obtenerUsuarioPorId($id) {
     $result = executeQuery($sql);
     if (!empty($result)) {
         while ($row = mysqli_fetch_assoc($result)) {
-            $arrDatos["NOMBRE"] = $row["nombre"];
-            $arrDatos["EMAIL"] = $row["email"];
-            $arrDatos["PASSWORD"] = $row["password"];
+            $arrDatos["nombre"] = $row["nombre"];
+            $arrDatos["email"] = $row["email"];
+            $arrDatos["password"] = $row["password"];
         }
     }
     return $arrDatos;
