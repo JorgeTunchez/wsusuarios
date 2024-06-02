@@ -34,11 +34,11 @@ function obtenerUsuarioPorId($id) {
     return $arrDatos;
 }
 
-function validarExisteUsuario($nombre){
+function validarExisteUsuario($email){
     // Valida si el nombre de usuario ya fue ingresado anteriormente
     $boolExiste = false;
     $conteo = "";
-    $sql = "SELECT COUNT(*) CONTEO FROM usuarios WHERE nombre = '$nombre'";
+    $sql = "SELECT COUNT(*) CONTEO FROM usuarios WHERE TRIM(email) = '$email'";
     $result = executeQuery($sql);
     if (!empty($result)) {
         while ($row = mysqli_fetch_assoc($result)) {
@@ -52,9 +52,14 @@ function validarExisteUsuario($nombre){
 
 function agregarUsuario($nombre, $email, $password) {
     // Permite agregar usuarios al catalogo
-    $sql = "INSERT INTO usuarios (nombre, email, password) VALUES ('$nombre', '$email', '$password')";
-    $result = executeQuery($sql);
-    $arrJson["codigoRespuesta"] = ($result)? 1: 0;
+    if( $nombre!='' && $email!='' && $password!='' ){
+        $sql = "INSERT INTO usuarios (nombre, email, password) VALUES ('$nombre', '$email', '$password')";
+        $result = executeQuery($sql);
+        $arrJson["codigoRespuesta"] = ($result)? 1: 0;
+    }else{
+        $arrJson["codigoRespuesta"] = 0;
+    }
+    
     return $arrJson;
 }
 

@@ -82,7 +82,7 @@ switch ($metodo) {
             $email = $data['email'];
             $password = $data['password'];
 
-            $boolExiste = validarExisteUsuario($nombre);
+            $boolExiste = validarExisteUsuario($email);
             if( !$boolExiste ){
                 $arrRespuesta = agregarUsuario($nombre, $email, $password);
                 if( $arrRespuesta["codigoRespuesta"] == '1' ){
@@ -91,21 +91,21 @@ switch ($metodo) {
                     $arrJsonSalida["descripcionRespuesta"] = "El registro se agrego exitosamente.";
                     echo json_encode($arrJsonSalida);
                 }else{
-                    http_response_code(500);
+                    http_response_code(200);
                     $arrJsonSalida["codigoRespuesta"] = 0;
                     $arrJsonSalida["descripcionRespuesta"] = "El registro no se puedo agregar.";
                     echo json_encode($arrJsonSalida);
                 }
             }else{
-                http_response_code(500);
+                http_response_code(200);
                 $arrJsonSalida["codigoRespuesta"] = 0;
                 $arrJsonSalida["descripcionRespuesta"] = "El nombre del usuario ya fue registrado anteriormente.";
                 echo json_encode($arrJsonSalida);
             }
         }else{
-            http_response_code(500);
+            http_response_code(200);
             $arrJsonSalida["codigoRespuesta"] = 0;
-            $arrJsonSalida["descripcionRespuesta"] = "Error en json de entrada.";
+            $arrJsonSalida["descripcionRespuesta"] = "Revisar los campos del formulario.";
             echo json_encode($arrJsonSalida);
         }
 
@@ -142,22 +142,51 @@ switch ($metodo) {
             $nombre = $data['nombre'];
             $email = $data['email'];
             $password = $data['password'];
-            $arrRespuesta = editarUsuario($id, $nombre, $email, $password);
-            if( $arrRespuesta["codigoRespuesta"] == '1' ){
-                http_response_code(200);
-                $arrJsonSalida["codigoRespuesta"] = 1;
-                $arrJsonSalida["descripcionRespuesta"] = "El registro se edito exitosamente.";
-                echo json_encode($arrJsonSalida);
-            }else{
-                http_response_code(500);
-                $arrJsonSalida["codigoRespuesta"] = 0;
-                $arrJsonSalida["descripcionRespuesta"] = "El registro no se pudo editar.";
-                echo json_encode($arrJsonSalida);
-            }
+			
+			$arrDatosUser = obtenerUsuarioPorId($id);
+			//print "<pre>";
+			//print_r($arrDatosUser);
+			//print "</pre>";
+			if( $arrDatosUser['email'] == $email ){
+				$arrRespuesta = editarUsuario($id, $nombre, $email, $password);
+				if( $arrRespuesta["codigoRespuesta"] == '1' ){
+					http_response_code(200);
+					$arrJsonSalida["codigoRespuesta"] = 1;
+					$arrJsonSalida["descripcionRespuesta"] = "El registro se edito exitosamente.";
+					echo json_encode($arrJsonSalida);
+				}else{
+					http_response_code(200);
+					$arrJsonSalida["codigoRespuesta"] = 0;
+					$arrJsonSalida["descripcionRespuesta"] = "El registro no se pudo editar.";
+					echo json_encode($arrJsonSalida);
+				}
+			}else{
+				$boolExiste = validarExisteUsuario($email);
+				if( !$boolExiste ){
+					$arrRespuesta = editarUsuario($id, $nombre, $email, $password);
+					if( $arrRespuesta["codigoRespuesta"] == '1' ){
+						http_response_code(200);
+						$arrJsonSalida["codigoRespuesta"] = 1;
+						$arrJsonSalida["descripcionRespuesta"] = "El registro se edito exitosamente.";
+						echo json_encode($arrJsonSalida);
+					}else{
+						http_response_code(200);
+						$arrJsonSalida["codigoRespuesta"] = 0;
+						$arrJsonSalida["descripcionRespuesta"] = "El registro no se pudo editar.";
+						echo json_encode($arrJsonSalida);
+					}
+				}else{
+					http_response_code(200);
+					$arrJsonSalida["codigoRespuesta"] = 0;
+					$arrJsonSalida["descripcionRespuesta"] = "El usuario ya ha sido registrado anteriormente.";	
+					echo json_encode($arrJsonSalida);
+				}
+			}
+			
         }else{
-            http_response_code(500);
+            http_response_code(200);
             $arrJsonSalida["codigoRespuesta"] = 0;
-            $arrJsonSalida["descripcionRespuesta"] = "Error en json de entrada.";
+            $arrJsonSalida["descripcionRespuesta"] = "Revisar los campos del formulario.";
             echo json_encode($arrJsonSalida);
         }
 
@@ -181,13 +210,13 @@ switch ($metodo) {
                 $arrJsonSalida["descripcionRespuesta"] = "El registro se eliminado exitosamente.";
                 echo json_encode($arrJsonSalida);
             }else{
-                http_response_code(500);
+                http_response_code(200);
                 $arrJsonSalida["codigoRespuesta"] = 0;
                 $arrJsonSalida["descripcionRespuesta"] = "El registro no se pudo eliminar.";
                 echo json_encode($arrJsonSalida);
             }
         }else{
-            http_response_code(500);
+            http_response_code(200);
             $arrJsonSalida["codigoRespuesta"] = 0;
             $arrJsonSalida["descripcionRespuesta"] = "Error en json de entrada.";
             echo json_encode($arrJsonSalida);
